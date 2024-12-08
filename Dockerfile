@@ -1,14 +1,23 @@
-# Gunakan image Python sebagai base
-FROM python:3.10-slim
+# Gunakan base image resmi Python 3.9
+FROM python:3.9-slim
 
-# Set working directory
+# Set environment variable untuk mencegah buffering pada log
+ENV PYTHONUNBUFFERED=1
+
+# Buat direktori kerja untuk aplikasi
 WORKDIR /app
 
-# Salin semua file ke container
-COPY . .
+# Salin file requirements.txt untuk instalasi dependensi
+COPY requirements.txt /app/
 
-# Install dependensi
+# Install dependensi Python
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Salin semua file ke dalam container
+COPY . /app/
+
+# Ekspos port 8080 untuk Cloud Run
+EXPOSE 8080
+
 # Jalankan aplikasi Flask
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]

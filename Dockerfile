@@ -1,17 +1,14 @@
-# Gunakan base image Python
-FROM python:3.9-slim
+# Gunakan image Python sebagai base
+FROM python:3.10-slim
 
-# Set work directory
+# Set working directory
 WORKDIR /app
 
-# Salin file ke container
-COPY . /app
+# Salin semua file ke container
+COPY . .
 
-# Install dependencies
+# Install dependensi
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port
-EXPOSE 8080
-
-# Command untuk menjalankan aplikasi
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
+# Jalankan aplikasi Flask
+CMD ["python", "app.py"]
